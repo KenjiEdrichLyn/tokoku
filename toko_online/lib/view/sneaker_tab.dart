@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:toko_online/model/item_model.dart';
-import 'package:toko_online/detail_screen.dart';
+import 'package:toko_online/view/detail_screen.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:toko_online/resources/project_colors.dart';
 
 class SneakerTab extends StatelessWidget{
   @override
@@ -24,7 +25,11 @@ class SneakerTab extends StatelessWidget{
                     builder: (context) => DetailScreen(itemIndex: index)
                   ));
                 },
-                child: Card(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(color: grey, width:1)
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
@@ -37,7 +42,7 @@ class SneakerTab extends StatelessWidget{
                             ),
                             padding: EdgeInsets.all(7),
                             margin: EdgeInsets.only(left: 10, top: 5, bottom: 5),
-                            child: Text(itemList[index].discount, style: TextStyle(fontSize: 15))
+                            child: Text(itemList[index].discount.toString()+"%", style: TextStyle(fontSize: 15))
                           ),
                           Expanded(child: Container()), // biar icon ke kanan
                           LikeButtonWidget(index: index)
@@ -49,13 +54,13 @@ class SneakerTab extends StatelessWidget{
                       Center(
                         child: Text(
                             itemList[index].name,
-                            style: TextStyle(fontSize: 15, color: Colors.deepPurpleAccent[400])
+                            style: TextStyle(fontSize: 15, color: purple)
                         ),
                       ),
                       Center(
                         child: Text(
                             "\$"+itemList[index].price.toString(),
-                            style: TextStyle(fontFamily: "NunitoBold", fontSize: 18, color: Colors.deepPurpleAccent[400])
+                            style: TextStyle(fontFamily: "NunitoBold", fontSize: 18, color: purple)
                         ),
                       ),
                       Padding(
@@ -106,7 +111,7 @@ class LikeButtonWidget extends StatefulWidget{
 class _ChangeIconImage extends State<LikeButtonWidget>{
   Color _iconColor;
 
-  Color setColor(){
+  setColor(){
     if(itemList[widget.index].isLiked){
       _iconColor = Colors.red;
     }else{

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toko_online/model/item_model.dart';
+import 'package:toko_online/resources/project_colors.dart';
 
 class SearchScreen extends StatefulWidget{
   @override
@@ -10,32 +11,40 @@ class SearchScreen extends StatefulWidget{
 }
 
 class _SearchState extends State<SearchScreen>{
-  List<String> _hint=[];
+  List<ProductItem> _hint=[];
   String _search="";
 
-  List<String> getHint (){
-    List<String> hintList=[];
+  List<ProductItem> getHint (){
+    List<ProductItem> hintList=[];
 
     var sneakerLength=itemList.length;
     var watchLength=watchList.length;
     var bagLength=backpackList.length;
 
-    // -- case sensitive --
-    for( var i = 0 ; i < sneakerLength; i++ ) {
-      if(itemList[i].name.toLowerCase().contains(_search.toLowerCase()) && _search!=""){
-        hintList.add(itemList[i].name);
+    if(_search.toLowerCase() == "sneaker" || _search.toLowerCase() == "sneakers"){
+      hintList.addAll(itemList);
+    }else if(_search.toLowerCase() == "watch"){
+      hintList.addAll(watchList);
+    }else if(_search.toLowerCase() == "backpack"){
+      hintList.addAll(backpackList);
+    }else{
+      for( var i = 0 ; i < sneakerLength; i++ ) {
+        if(itemList[i].name.toLowerCase().contains(_search.toLowerCase()) && _search!=""){
+          hintList.add(itemList[i]);
+        }
+      }
+      for( var i = 0 ; i < watchLength; i++ ) {
+        if(watchList[i].name.toLowerCase().contains(_search.toLowerCase()) && _search!=""){
+          hintList.add(watchList[i]);
+        }
+      }
+      for( var i = 0 ; i < bagLength; i++ ) {
+        if(backpackList[i].name.toLowerCase().contains(_search.toLowerCase()) && _search!=""){
+          hintList.add(backpackList[i]);
+        }
       }
     }
-    for( var i = 0 ; i < watchLength; i++ ) {
-      if(watchList[i].name.toLowerCase().contains(_search.toLowerCase()) && _search!=""){
-        hintList.add(watchList[i].name);
-      }
-    }
-    for( var i = 0 ; i < bagLength; i++ ) {
-      if(backpackList[i].name.toLowerCase().contains(_search.toLowerCase()) && _search!=""){
-        hintList.add(backpackList[i].name);
-      }
-    }
+
     return hintList;
   }
 
@@ -46,7 +55,7 @@ class _SearchState extends State<SearchScreen>{
     return Scaffold(
       appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.close_outlined, color: Colors.black,),
+            icon: Icon(Icons.close_outlined, color: black),
             onPressed: () {
               setState(() {
                 if(_search==""){
@@ -58,7 +67,7 @@ class _SearchState extends State<SearchScreen>{
               });
             }),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: transparent,
           elevation: 0,
           title: TextField(
             controller: msgController,
@@ -77,12 +86,18 @@ class _SearchState extends State<SearchScreen>{
       body: ListView.builder(
           itemCount: _hint.length,
           itemBuilder: (BuildContext context, index){
-            return Padding(
-              padding: const EdgeInsets.only(right: 8, left: 8, bottom: 3),
+            return Container(
+              margin: const EdgeInsets.only(right: 8, left: 8, bottom: 3),
+              height: 100,
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(_hint[index]),
+                  child: Row(
+                    children: [
+                      Image.asset(_hint[index].photoAsset, fit: BoxFit.fitHeight),
+                      Text(_hint[index].name)
+                    ],
+                  )
                 ),
               ),
             );

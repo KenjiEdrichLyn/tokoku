@@ -1,6 +1,7 @@
 name: toko_online
-description: A new Flutter application.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+description: Tokoku online store
+publish_to: 'none'
+title: Tokoku
 
 version: 1.0.0+1
 

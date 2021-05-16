@@ -1,24 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:toko_online/sneaker_tab.dart';
-import 'package:toko_online/watch_tab.dart';
-import 'package:toko_online/backpack_tab.dart';
-import 'package:toko_online/search_screen.dart';
+import 'package:toko_online/view/sneaker_tab.dart';
+import 'package:toko_online/view/watch_tab.dart';
+import 'package:toko_online/view/backpack_tab.dart';
+import 'package:toko_online/view/search_screen.dart';
+import 'package:toko_online/resources/project_colors.dart';
 
 class HomeScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Container(
+                height:100,
+                child: DrawerHeader(
+                  decoration: BoxDecoration(
+                      color: transparent,
+                      image: DecorationImage(fit: BoxFit.fitWidth,image: AssetImage("images/background.jpg"))
+                  ), 
+                  child: Center(child: Text("Menus", style: TextStyle(fontSize: 30, fontFamily: "NunitoBold", color: Colors.white))),
+                ),
+              ),
+              InkWell(child: ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text('Search'),
+                ),
+                onTap: (){
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/search');
+                },
+              ),
+              InkWell(child: ListTile(
+                leading: Icon(Icons.shopping_cart),
+                title: Text('Cart'),
+              ),
+                onTap: (){
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/cart');
+                },
+              ),
+            ],
+          ),
+        ),
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.apps)),
+        leading: Builder(
+          builder: (BuildContext context){
+            return IconButton(
+                icon: Icon(Icons.apps, color: black),
+                onPressed: () => Scaffold.of(context).openDrawer()
+            );
+          }
+        ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: transparent,
         elevation: 0,
         title: Container(
             margin: EdgeInsets.only(top:5),
             child: Image.asset('images/xe_logo_transparent.png', fit: BoxFit.contain, height: 160, width: 160,)
         ),
         actions: <Widget>[
-          IconButton(color: Colors.black,icon: Icon(Icons.search), onPressed: () {
+          IconButton(color: black,icon: Icon(Icons.search), onPressed: () {
             Navigator.push(context, MaterialPageRoute(
                 builder: (context) => SearchScreen()
             ));
@@ -38,12 +81,12 @@ class HomeScreen extends StatelessWidget{
           child: new Scaffold(
             appBar: AppBar(
               elevation: 0,
-              backgroundColor: Colors.transparent,
+              backgroundColor: transparent,
               bottom: TabBar(
                 labelPadding: EdgeInsets.only(left: 25, right: 25),
                 isScrollable: true,
-                labelColor: Colors.deepPurpleAccent[400],
-                indicatorColor: Colors.deepPurpleAccent[400],
+                labelColor: purple,
+                indicatorColor: purple,
                 unselectedLabelColor: Colors.black54,
                 labelStyle: TextStyle(
                   fontFamily: 'NunitoBold',
@@ -96,7 +139,7 @@ class HomeScreen extends StatelessWidget{
                   style: TextStyle(
                     fontFamily: 'NunitoBold',
                     fontSize: 30,
-                    color: Colors.black
+                    color: black
                   ),
               ),
             ),

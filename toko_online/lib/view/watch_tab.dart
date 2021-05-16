@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:toko_online/model/item_model.dart';
-import 'package:toko_online/backpack_detail_screen.dart';
+import 'package:toko_online/view/watch_detail_screen.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:toko_online/resources/project_colors.dart';
 
-class BackpackTab extends StatelessWidget{
+class WatchTab extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,16 +16,20 @@ class BackpackTab extends StatelessWidget{
             crossAxisSpacing: 10,
             mainAxisSpacing: 15,
           ),
-          itemCount: backpackList.length,
+          itemCount: watchList.length,
           itemBuilder: (BuildContext context, index){
-            if(backpackList[index].type == "Backpack") {
+            if(watchList[index].type == "Watch") {
               return InkWell(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => BackpackDetailScreen(itemIndex: index)
+                      builder: (context) => WatchDetailScreen(itemIndex: index)
                   ));
                 },
-                child: Card(
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(color: grey, width:1)
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
@@ -37,25 +42,25 @@ class BackpackTab extends StatelessWidget{
                                 ),
                                 padding: EdgeInsets.all(7),
                                 margin: EdgeInsets.only(left: 10, top: 5, bottom: 5),
-                                child: Text(backpackList[index].discount, style: TextStyle(fontSize: 15))
+                                child: Text(watchList[index].discount.toString()+"%", style: TextStyle(fontSize: 15))
                             ),
                             Expanded(child: Container()), // biar icon ke kanan
                             LikeButtonWidget(index: index)
                           ]
                       ),
                       Expanded(
-                        child: Image.asset(backpackList[index].photoAsset, fit: BoxFit.contain),
+                        child: Image.asset(watchList[index].photoAsset, fit: BoxFit.contain),
                       ),
                       Center(
                         child: Text(
-                            backpackList[index].name,
-                            style: TextStyle(fontSize: 15, color: Colors.deepPurpleAccent[400])
+                            watchList[index].name,
+                            style: TextStyle(fontSize: 15, color: purple)
                         ),
                       ),
                       Center(
                         child: Text(
-                            "\$"+backpackList[index].price.toString(),
-                            style: TextStyle(fontFamily: "NunitoBold", fontSize: 18, color: Colors.deepPurpleAccent[400])
+                            "\$"+watchList[index].price.toString(),
+                            style: TextStyle(fontFamily: "NunitoBold", fontSize: 18, color: purple)
                         ),
                       ),
                       Padding(
@@ -70,7 +75,7 @@ class BackpackTab extends StatelessWidget{
                                 color: Colors.amber,
                               ),
                               minRating: 1,
-                              initialRating: backpackList[index].rating,
+                              initialRating: watchList[index].rating,
                               direction: Axis.horizontal,
                               allowHalfRating: true,
                               itemCount: 5,
@@ -78,7 +83,7 @@ class BackpackTab extends StatelessWidget{
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 5.0),
-                              child: Text(backpackList[index].rating.toString(), style: TextStyle(fontSize: 10)),
+                              child: Text(watchList[index].rating.toString(), style: TextStyle(fontSize: 10)),
                             )
                           ],
                         ),
@@ -106,9 +111,9 @@ class LikeButtonWidget extends StatefulWidget{
 class _ChangeIconImage extends State<LikeButtonWidget>{
   Color _iconColor;
 
-  Color setColor(){
-    if(backpackList[widget.index].isLiked){
-      _iconColor = Colors.red;
+  setColor(){
+    if(watchList[widget.index].isLiked){
+      _iconColor = red;
     }else{
       _iconColor = Colors.black26;
     }
@@ -121,12 +126,12 @@ class _ChangeIconImage extends State<LikeButtonWidget>{
       icon: Image.asset("images/heart.png", color: _iconColor, height: 15),
       onPressed: () {
         setState(() {
-          if(_iconColor == Colors.red){
+          if(_iconColor == red){
             _iconColor = Colors.black26;
-            backpackList[widget.index].isLiked = false;
+            watchList[widget.index].isLiked = false;
           }else{
-            _iconColor = Colors.red;
-            backpackList[widget.index].isLiked = true;
+            _iconColor = red;
+            watchList[widget.index].isLiked = true;
           }
         });
       },

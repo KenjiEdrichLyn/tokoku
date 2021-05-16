@@ -5,12 +5,16 @@ class CartItem{
   String imageAsset;
   String size;
   double total;
+  Color color;
+  int discount;
 
   CartItem({
     this.name,
     this.imageAsset,
     this.size,
-    this.total
+    this.total,
+    this.color,
+    this.discount
   });
 }
 
