@@ -1,15 +1,28 @@
 import 'dart:ui';
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:flutter/material.dart';
-import 'package:toko_online/view/backpack_tab.dart';
 import 'package:toko_online/model/item_model.dart';
 import 'package:toko_online/model/cart_model.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:toko_online/resources/project_colors.dart';
 
 class BackpackDetailScreen extends StatelessWidget{
-  final int itemIndex;
-  BackpackDetailScreen({this.itemIndex});
+  final ProductItem object;
+  BackpackDetailScreen({this.object});
+
+  Widget getLikeIcon(bool isliked){
+    if(isliked){
+      return Padding(
+        padding: const EdgeInsets.only(right: 20),
+        child: Image.asset("images/heart.png", color: red, height: 15, width: 15,),
+      );
+    }else{
+      return Padding(
+        padding: const EdgeInsets.only(right: 20),
+        child: Image.asset("images/heart.png", color: grey, height: 15, width: 15,),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +30,14 @@ class BackpackDetailScreen extends StatelessWidget{
         appBar: AppBar(
             leading: IconButton(icon: Icon(Icons.arrow_back, color: black), onPressed: () { Navigator.pop(context); }),
             centerTitle: true,
-            backgroundColor: Colors.transparent,
+            backgroundColor: transparent,
             elevation: 0,
             title: Container(
                 margin: EdgeInsets.only(top:5),
                 child: Image.asset('images/xe_logo_transparent.png', fit: BoxFit.contain, height: 160, width: 160,)
             ),
             actions: <Widget>[
-              LikeButtonWidget(index: itemIndex)
+              getLikeIcon(object.isLiked)
             ]
         ),
         body: SingleChildScrollView(child: Column(
@@ -36,17 +49,17 @@ class BackpackDetailScreen extends StatelessWidget{
                           padding: EdgeInsets.all(10),
                           margin: EdgeInsets.only(top: 10, bottom: 10),
                           decoration: BoxDecoration(color: Colors.cyan[100], borderRadius: BorderRadius.circular(10)),
-                          child: Text(backpackList[itemIndex].discount.toString()+"%")
+                          child: Text(object.discount.toString()+"%")
                       )
                   )
               ),
-              Image.asset(backpackList[itemIndex].photoAsset, fit: BoxFit.fitWidth),
+              Image.asset(object.photoAsset, fit: BoxFit.fitWidth),
               Padding(
                 padding: const EdgeInsets.only(left:15),
                 child: Row(
                   children: <Widget>[
                     Text(
-                        backpackList[itemIndex].name,
+                        object.name,
                         style: TextStyle(fontFamily: "NunitoBold", fontSize: 25, color: purple)
                     ),
                     Expanded(child: Container()),
@@ -62,7 +75,7 @@ class BackpackDetailScreen extends StatelessWidget{
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right:8.0, left: 4.0),
-                      child: Text("("+backpackList[itemIndex].rating.toString()+")"),
+                      child: Text("("+object.rating.toString()+")"),
                     )
                   ],
                 ),
@@ -70,13 +83,13 @@ class BackpackDetailScreen extends StatelessWidget{
               Padding(
                 padding: const EdgeInsets.only(left: 15),
                 child: Text(
-                    backpackList[itemIndex].detail,
+                    object.detail,
                     style: TextStyle(fontSize: 15, color: purple)
                 ),
               ),
               Padding(
                   padding: const EdgeInsets.only(left: 15, top: 30),
-                  child: RadioForm(index: itemIndex)
+                  child: RadioForm(object: this.object)
               )
             ]
         ),)
@@ -85,22 +98,57 @@ class BackpackDetailScreen extends StatelessWidget{
 }
 
 class RadioForm extends StatefulWidget{
-  final int index;
-  RadioForm({this.index});
+  final ProductItem object;
+  RadioForm({ this.object });
+
+  double getDiscounted(ProductItem item){
+    return item.price-(item.price*item.discount/100);
+  }
 
   @override
   State<StatefulWidget> createState() {
-    return _FormState(backpackList[index].color[0], backpackList[index].price);
+    return _FormState(object.color[0], object.price, getDiscounted(object));
   }
 }
 
 class _FormState extends State<RadioForm>{
   Color _color;
   double _total;
-  _FormState(this._color, this._total);
+  _FormState(this._color, this._total, this._afterDiscount);
 
-  String _size="Small";
+  double _afterDiscount;
+  String _size="US 6";
   int _qty=1;
+
+  Color getColorPick(Color color){
+    if(_color != color){
+      return transparent;
+    }else{
+      return Colors.cyan[100];
+    }
+  }
+
+  Widget getDiscountWidget(){
+    if(widget.object.discount == 0){
+      return Text(
+        "\$"+_total.toString(),
+        style: TextStyle(fontSize: 28, fontFamily: "NunitoBold", color:black),
+      );
+    }else{
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+            text: TextSpan(text: "\$"+_total.toString(), style: TextStyle(decoration: TextDecoration.lineThrough, color: black, fontSize: 22, fontFamily: "NunitoBold")),
+          ),
+          Text(
+            "\$"+_afterDiscount.toString(),
+            style: TextStyle(fontSize: 17, fontFamily: "NunitoBold", color:black),
+          )
+        ],
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context){
@@ -109,15 +157,15 @@ class _FormState extends State<RadioForm>{
         CustomRadioButton(
           elevation: 0,
           selectedColor: Colors.cyan[100],
-          unSelectedColor: Colors.transparent,
-          buttonLables: ["Small","Medium","Big"],
-          buttonValues: ["Small","Medium","Big"],
+          unSelectedColor: transparent,
+          buttonLables: ["Small","Medium","Large"],
+          buttonValues: ["Small","Medium","Large"],
           radioButtonValue: (value){
             _size = value;
           },
           enableShape: false,
-          unSelectedBorderColor: Colors.transparent,
-          selectedBorderColor: Colors.transparent,
+          unSelectedBorderColor: transparent,
+          selectedBorderColor: transparent,
           buttonTextStyle: ButtonTextStyle(
               selectedColor: black,
               unSelectedColor: black,
@@ -135,24 +183,30 @@ class _FormState extends State<RadioForm>{
                 height: 50,
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index){
-                    final List<Color> color = backpackList[widget.index].color;
-                    return InkWell(
-                      splashColor: color[index],
-                      borderRadius: BorderRadius.circular(50),
-                      child: Container(
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: color[index]),
-                        height: 25,
-                        width: 25,
-                        margin: EdgeInsets.only(left:15, right: 15),
+                    final List<Color> color = widget.object.color;
+                    return Container(
+                      margin: EdgeInsets.only(left:6),
+                      child: Material(
+                          color: getColorPick(color[index]),
+                          borderRadius: BorderRadius.circular(80),
+                          child: InkResponse(
+                            splashColor: transparent,
+                            child: Container(
+                              decoration: BoxDecoration(shape: BoxShape.circle, color: color[index]),
+                              height: 25,
+                              width: 25,
+                              margin: EdgeInsets.only(left:10, right: 10),
+                            ),
+                            onTap: (){
+                              setState(() {
+                                _color=color[index];
+                              });
+                            },
+                          )
                       ),
-                      onTap: (){
-                        setState(() {
-                          _color=color[index];
-                        });
-                      },
                     );
                   },
-                  itemCount: backpackList[widget.index].color.length,
+                  itemCount: widget.object.color.length,
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                 ),
@@ -168,7 +222,8 @@ class _FormState extends State<RadioForm>{
                 setState(() {
                   if(_qty<=9){
                     _qty++;
-                    _total+=backpackList[widget.index].price;
+                    _total+=widget.object.price;
+                    _afterDiscount = _total - (_total*widget.object.discount/100);
                   }
                 });
               },splashRadius: 15, color: purple),
@@ -184,39 +239,19 @@ class _FormState extends State<RadioForm>{
                 setState(() {
                   if(_qty>1){
                     _qty--;
-                    _total-=backpackList[widget.index].price;
+                    _total-=widget.object.price;
+                    _afterDiscount = _total - (_total*widget.object.discount/100);
                   }
                 });
               },splashRadius: 15, color: purple),
             ],
           ),
         ),
-        Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Row(
-              children: [
-                Text("Color Picked:", style: TextStyle(fontSize: 15)),
-                Container(
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: _color),
-                  height: 25,
-                  width: 25,
-                  margin: EdgeInsets.only(left:30),
-                )
-              ],
-            )
-        ),
         Container(
             margin: EdgeInsets.only(top:30, bottom:15, right: 10),
             child: Row(
               children: <Widget>[
-                Text(
-                  "\$"+_total.toString(),
-                  style: TextStyle(fontSize: 28, fontFamily: "NunitoBold", color:black),
-                ),
-                Text(
-                  " : total",
-                  style: TextStyle(fontSize: 15, fontFamily: "NunitoBold", color:purple),
-                ),
+                getDiscountWidget(),
                 Expanded(child: Container()),
                 ElevatedButton(
                   child: Row(
@@ -226,19 +261,19 @@ class _FormState extends State<RadioForm>{
                     ],
                   ),
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.transparent,
+                      primary: transparent,
                       onPrimary: purple,
                       elevation: 0
                   ),
                   onPressed: (){
                     cartList.add(
                         CartItem(
-                            name: backpackList[widget.index].name,
-                            total: backpackList[widget.index].price * _qty,
-                            imageAsset: backpackList[widget.index].photoAsset,
+                            name: widget.object.name,
+                            total: widget.object.price * _qty,
+                            imageAsset: widget.object.photoAsset,
                             size: _size,
                             color: _color,
-                            discount: itemList[widget.index].discount
+                            discount: widget.object.discount
                         )
                     );
                     Navigator.popAndPushNamed(context, '/cart');

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:toko_online/model/item_model.dart';
 import 'package:toko_online/resources/project_colors.dart';
+import 'package:toko_online/view/backpack_detail_screen.dart';
+import 'package:toko_online/view/detail_screen.dart';
+import 'package:toko_online/view/watch_detail_screen.dart';
 
 class SearchScreen extends StatefulWidget{
   @override
@@ -84,20 +87,37 @@ class _SearchState extends State<SearchScreen>{
       body: ListView.builder(
           itemCount: _hint.length,
           itemBuilder: (BuildContext context, index){
-            return Container(
-              margin: const EdgeInsets.only(right: 8, left: 8, bottom: 3),
-              height: 100,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Image.asset(_hint[index].photoAsset, fit: BoxFit.fitHeight),
-                      Text(_hint[index].name)
-                    ],
-                  )
+            return InkWell(
+                child: Container(
+                  margin: const EdgeInsets.only(right: 8, left: 8, bottom: 3),
+                  height: 100,
+                  child: Card(
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Image.asset(_hint[index].photoAsset, fit: BoxFit.fitHeight),
+                            Text(_hint[index].name)
+                          ],
+                        )
+                    ),
+                  ),
                 ),
-              ),
+              onTap: (){
+                  if(_hint[index].type=="Sneakers"){
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => DetailScreen(object: _hint[index])
+                    ));
+                  }else if(_hint[index].type=="Backpack"){
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => BackpackDetailScreen(object: _hint[index])
+                    ));
+                  }else if(_hint[index].type=="Watch"){
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => WatchDetailScreen(object: _hint[index])
+                    ));
+                  }
+              },
             );
           }
       ),

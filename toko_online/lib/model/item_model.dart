@@ -10,6 +10,7 @@ class ProductItem {
   String photoAsset;
   List<Color> color;
   double rating;
+  int id;
 
   ProductItem({
       this.name,
@@ -21,6 +22,7 @@ class ProductItem {
       this.photoAsset,
       this.color,
       this.rating,
+      this.id,
   });
 }
 
@@ -32,10 +34,11 @@ var itemList = [
       detail: "Nothing as fly, nothing as comfortable, nothing as proven",
       price: 240.00,
       isLiked: false,
-      discount: 30,
+      discount: 0,
       photoAsset: "images/shoe1.jpg",
       color: [Colors.yellow, Colors.redAccent, Colors.cyan[900]],
-      rating: 2.1
+      rating: 2.1,
+      id: 0
   ),
   ProductItem(
       name: "Nike Air Max 95 SE",
@@ -46,7 +49,8 @@ var itemList = [
       discount: 0,
       photoAsset: "images/shoe2.jpg",
       color: [Colors.purpleAccent, Colors.redAccent, Colors.blue],
-      rating: 4
+      rating: 4,
+      id: 1
   ),
   ProductItem(
       name: "Nike Air Force 1",
@@ -57,7 +61,8 @@ var itemList = [
       discount: 10,
       photoAsset: "images/shoe3.jpg",
       color: [Colors.yellowAccent,Colors.lightBlue],
-      rating: 3.2
+      rating: 3.2,
+      id: 2
   ),
   ProductItem(
       name: "Nike Waffle One",
@@ -68,7 +73,8 @@ var itemList = [
       discount: 25,
       photoAsset: "images/shoe4.jpg",
       color: [Colors.black],
-      rating: 4.6
+      rating: 4.6,
+      id: 3
   ),
   ProductItem(
       name: "Nike Air Max 90 SE",
@@ -79,7 +85,8 @@ var itemList = [
       discount: 50,
       photoAsset: "images/shoe5.jpg",
       color: [Colors.black, Colors.yellowAccent],
-      rating: 5
+      rating: 5,
+      id: 4
   ),
 ];
 
@@ -93,7 +100,8 @@ var watchList=[
       discount: 40,
       photoAsset: "images/watch1.jpg",
       color: [Colors.greenAccent, Colors.yellowAccent],
-      rating: 3.6
+      rating: 3.6,
+      id: 0
   ),
   ProductItem(
       name: "Nike Watch SE2",
@@ -104,7 +112,8 @@ var watchList=[
       discount: 25,
       photoAsset: "images/watch2.jpg",
       color: [Colors.black, Colors.grey],
-      rating: 4.7
+      rating: 4.7,
+      id: 1
   ),
   ProductItem(
       name: "Nike Watch 2+",
@@ -115,7 +124,8 @@ var watchList=[
       discount: 20,
       photoAsset: "images/watch3.jpg",
       color: [Colors.blue, Colors.yellowAccent, Colors.red],
-      rating: 2.2
+      rating: 2.2,
+      id: 2
   ),
 ];
 
@@ -126,10 +136,11 @@ var backpackList=[
       detail: "One that only he could have imagined and one that the world may never understand.",
       price: 97.00,
       isLiked: false,
-      discount: 33,
+      discount: 30,
       photoAsset: "images/bag1.jpg",
       color: [Colors.blue, Colors.yellowAccent, Colors.red],
-      rating: 2.2
+      rating: 2.2,
+      id: 0
   ),
   ProductItem(
       name: "Nike Sporstwear",
@@ -140,7 +151,8 @@ var backpackList=[
       discount: 0,
       photoAsset: "images/bag2.jpg",
       color: [Colors.blue, Colors.yellowAccent, Colors.red],
-      rating: 2.2
+      rating: 2.2,
+      id: 1
   ),
   ProductItem(
       name: "Nike Watch 2+",
@@ -151,7 +163,8 @@ var backpackList=[
       discount: 10,
       photoAsset: "images/bag3.jpg",
       color: [Colors.blue, Colors.yellowAccent, Colors.red],
-      rating: 2.2
+      rating: 2.2,
+      id: 2
   ),
   ProductItem(
       name: "Nike 2.0 Print",
@@ -162,6 +175,7 @@ var backpackList=[
       discount: 0,
       photoAsset: "images/bag4.jpg",
       color: [Colors.blue, Colors.yellowAccent, Colors.red],
-      rating: 2.2
+      rating: 2.2,
+      id: 3
   ),
 ];

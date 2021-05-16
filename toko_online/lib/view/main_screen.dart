@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:toko_online/model/item_model.dart';
 import 'package:toko_online/view/sneaker_tab.dart';
 import 'package:toko_online/view/watch_tab.dart';
 import 'package:toko_online/view/backpack_tab.dart';
 import 'package:toko_online/view/search_screen.dart';
 import 'package:toko_online/resources/project_colors.dart';
 
-class HomeScreen extends StatelessWidget{
-  var bello;
+class HomeScreen extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState()=>_HomeScreen();
+}
+
+class _HomeScreen extends State<HomeScreen>{
+  List<ProductItem> _sneakerList = itemList;
+  List<ProductItem> _watchList = watchList;
+  List<ProductItem> _backpackList = backpackList;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +80,7 @@ class HomeScreen extends StatelessWidget{
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){Navigator.of(context).pushNamed('/cart');},
-        child: Icon(Icons.shopping_cart, color: Colors.blue[100],),
+        child: Icon(Icons.shopping_cart, color: Colors.blue[100]),
         backgroundColor: Colors.deepPurpleAccent,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -135,20 +144,67 @@ class HomeScreen extends StatelessWidget{
                   )
                 ],
               ),
-              title: Text(
-                  "Our Product",
-                  style: TextStyle(
-                    fontFamily: 'NunitoBold',
-                    fontSize: 30,
-                    color: black
+              title: Row(
+                children: [
+                  Text(
+                    "Our Product",
+                    style: TextStyle(
+                        fontFamily: 'NunitoBold',
+                        fontSize: 30,
+                        color: black
+                    ),
                   ),
-              ),
+                  Expanded(child:Container()),
+                  DropdownButton(
+                      underline: Container(
+                        color: transparent,
+                      ),
+                      elevation: 0,
+                      hint: Text("Sort By"),
+                      icon: Icon(Icons.keyboard_arrow_down),
+                      items: [
+                        DropdownMenuItem(
+                          child: Text("Highest Price"),
+                          value: 1,
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Lowest Price"),
+                          value: 2,
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          if(value == 2){
+                            _sneakerList.sort((a,b){
+                              return a.price.compareTo(b.price);
+                            });
+                            _watchList.sort((a,b){
+                              return a.price.compareTo(b.price);
+                            });
+                            _backpackList.sort((a,b){
+                              return a.price.compareTo(b.price);
+                            });
+                          }else{
+                            _sneakerList.sort((a,b){
+                              return b.price.compareTo(a.price);
+                            });
+                            _watchList.sort((a,b){
+                              return b.price.compareTo(a.price);
+                            });
+                            _backpackList.sort((a,b){
+                              return b.price.compareTo(a.price);
+                            });
+                          }
+                        });
+                      }),
+                ],
+              )
             ),
             body: TabBarView(
               children: <Widget>[
-                SneakerTab(),
-                WatchTab(),
-                BackpackTab()
+                sneakerTab(_sneakerList),
+                watchTab(_watchList),
+                backpackTab(_backpackList)
               ],
             ),
           ),
