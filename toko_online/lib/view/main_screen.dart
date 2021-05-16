@@ -6,6 +6,7 @@ import 'package:toko_online/view/search_screen.dart';
 import 'package:toko_online/resources/project_colors.dart';
 
 class HomeScreen extends StatelessWidget{
+  var bello;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

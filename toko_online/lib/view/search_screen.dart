@@ -7,7 +7,6 @@ class SearchScreen extends StatefulWidget{
   State<StatefulWidget> createState() {
     return _SearchState();
   }
-
 }
 
 class _SearchState extends State<SearchScreen>{
@@ -44,7 +43,6 @@ class _SearchState extends State<SearchScreen>{
         }
       }
     }
-
     return hintList;
   }
 
